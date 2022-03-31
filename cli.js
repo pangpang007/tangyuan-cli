@@ -9,21 +9,11 @@
 // console.log("tangyuan-cli working~");
 
 //命令行指令配置
-const { program, Command } = require("commander");
+const { program } = require("commander");
 //获取package配置文件
 const package = require("./package.json");
-//命令行美化工具
-const chalk = require("chalk");
-//实现与用户问询交互的功能
-const inquirer = require("inquirer");
 
-function createApp(name) {}
-
-function createTempletePage(type, name) {
-  console.log("create success-->", "type:", type, "name:", name);
-}
-
-const programs = new Command();
+const { cmd_createApp, cmd_addTemplate } = require("./commands.js");
 
 program.name(package.name).usage(`<command> [option]`);
 
@@ -33,67 +23,17 @@ program
   .command("create-base-app")
   .alias("create")
   .description("create base App project")
-  .action(() => {
-    inquirer
-      .prompt([
-        {
-          name: "name",
-          type: "input",
-          message: "Please input project name:",
-        },
-      ])
-      .then(({ name }) => {
-        createApp(name);
-      });
+  .argument("<string>", "string to split")
+  .action((str) => {
+    cmd_createApp(str);
   });
 
 program
-  .command("add-templete-page")
-  .alias("atp")
-  .description("add templete page file in Package page")
+  .command("add-template")
+  .alias("add-t")
+  .description("add template page file in Package page")
   .action(() => {
-    inquirer
-      .prompt([
-        /* Pass your questions in here */
-        {
-          name: "type",
-          type: "list",
-          message: "which type templete",
-          choices: [
-            {
-              name: "single-table",
-              checked: true,
-            },
-            {
-              name: "tree-table",
-            },
-          ],
-        },
-      ])
-      .then(({ type }) => {
-        // Use user feedback for... whatever!!
-        inquirer
-          .prompt([
-            /* Pass your questions in here */
-            {
-              name: "name",
-              type: "input",
-              message: "Whats Templete Name?",
-            },
-          ])
-          .then(({ name }) => {
-            // Use user feedback for... whatever!!
-            console.log("name", type, name);
-            createTempletePage(type, name);
-          });
-      })
-      .catch((error) => {
-        if (error.isTtyError) {
-          // Prompt couldn't be rendered in the current environment
-        } else {
-          // Something else went wrong
-        }
-      });
+    cmd_addTemplate();
   });
 
 program.parse(process.argv);

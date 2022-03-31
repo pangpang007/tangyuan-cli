@@ -20,9 +20,8 @@ function cmd_createApp(name) {
     return;
   } else {
     download(
-      `direct:http://git.yonyoucloud.com/liuyanam/mtl-base-project.git`,
+      `github:pangpang007/tangyuan-react-base`,
       filename,
-      { clone: true },
       function (err) {
         if (err) {
           log("download repo Error:", "error", false);
